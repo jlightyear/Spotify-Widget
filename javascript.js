@@ -8,7 +8,7 @@
   xhr.onload = function () {
       if (this.status === 200) { // the result is OK
         var response = JSON.parse(xhr.response);
-        //console.log('onload response', response);
+        console.log('onload response', response);
         HandlerResponse(response);
       }
     };
@@ -29,7 +29,6 @@
         titulo.textContent=responseTitulo;
         autor.textContent=responseAutor;
         audio.src = response.preview_url;
-        //audio.src= 'https://p.scdn.co/mp3-preview/f454c8224828e21fa146af84916fd22cb89cedc6';
     };
 
 
