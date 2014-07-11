@@ -28,16 +28,15 @@
         img.src = response.album.images[0].url;
         titulo.textContent=responseTitulo;
         autor.textContent=responseAutor;
+        audio.src = response.preview_url;
+        //audio.src= 'https://p.scdn.co/mp3-preview/f454c8224828e21fa146af84916fd22cb89cedc6';
     };
 
 
 
-    /*boton.addEventListener(
-    'click', function (evt) {
-      evt.preventDefault();
-      if(evt.target.nodeName === ''){
-        console.log(evt.target.textContent);
-      }
-  },);*/
+    boton.addEventListener(
+    'click', function () {
+        audio.play();
+  });
   
 })(window);
