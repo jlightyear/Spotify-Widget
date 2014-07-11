@@ -18,6 +18,7 @@
 
     var boton = document.querySelector(".btn-play");
     var audio = document.getElementById("audio");
+    var chivato = 0;
 
     var HandlerResponse = function(response){
         var titulo = document.querySelector(".title");
@@ -35,7 +36,17 @@
 
     boton.addEventListener(
     'click', function () {
-        audio.play();
+        if (chivato==0) {
+            audio.play();
+            boton.classList.add('playing');
+            chivato = 1 ;
+        }
+        else {
+            audio.pause();
+            boton.classList.remove('playing');
+            chivato = 0;
+        }
+
   });
   
 })(window);
