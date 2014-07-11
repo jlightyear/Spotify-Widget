@@ -8,12 +8,36 @@
   xhr.onload = function () {
       if (this.status === 200) { // the result is OK
         var response = JSON.parse(xhr.response);
-        console.log('onload response', response);
+        //console.log('onload response', response);
+        HandlerResponse(response);
       }
     };
 
     // send the request
     xhr.send();
 
+    var boton = document.querySelector(".btn-play");
+    var audio = document.getElementById("audio");
+
+    var HandlerResponse = function(response){
+        var titulo = document.querySelector(".title");
+        var responseTitulo = response.album.name;
+        var autor = document.querySelector(".author");
+        var responseAutor = response.artists[0].name;
+        var img = document.querySelector(".cover").querySelector("img");
+        img.src = response.album.images[0].url;
+        titulo.textContent=responseTitulo;
+        autor.textContent=responseAutor;
+    };
+
+
+
+    /*boton.addEventListener(
+    'click', function (evt) {
+      evt.preventDefault();
+      if(evt.target.nodeName === ''){
+        console.log(evt.target.textContent);
+      }
+  },);*/
   
 })(window);
