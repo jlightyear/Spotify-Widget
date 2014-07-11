@@ -18,6 +18,7 @@
 
     var boton = document.querySelector(".btn-play");
     var audio = document.getElementById("audio");
+    var bar = document.querySelector(".seekbar progress");
     var chivato = 0;
 
     var HandlerResponse = function(response){
@@ -30,9 +31,8 @@
         titulo.textContent=responseTitulo;
         autor.textContent=responseAutor;
         audio.src = response.preview_url;
+        bar.value = 0;
     };
-
-
 
     boton.addEventListener(
     'click', function () {
@@ -46,7 +46,12 @@
             boton.classList.remove('playing');
             chivato = 0;
         }
+    });
 
-  });
+    audio.addEventListener('timeupdate', function() {
+      //bar.setAttribute('max', audio.duration);
+      bar.max = audio.duration;
+      bar.value = audio.currentTime;
+    });
   
 })(window);
