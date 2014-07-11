@@ -49,9 +49,12 @@
     });
 
     audio.addEventListener('timeupdate', function() {
-      //bar.setAttribute('max', audio.duration);
       bar.max = audio.duration;
       bar.value = audio.currentTime;
     });
-  
+
 })(window);
+
+// fly me to the moon
+// encodeURIComponent(parametroDeBusqueda)
+// https://api.spotify.com/v1/search?q={{ PARAMETRO DE BUSQUEDA }}&type=track
