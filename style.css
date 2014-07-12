@@ -130,6 +130,8 @@ h1 {
 .cover {
   height: 300px;
   position: relative;
+  background: #000000;
+  text-align: center;
 }
 
 img {

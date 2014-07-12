@@ -1,57 +1,73 @@
 (function (global) {
   'use strict';
 
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', "https://api.spotify.com/v1/tracks/0eGsygTp906u18L0Oimnem");
-  xhr.setRequestHeader('Accept', 'application/json');
-
-  xhr.onload = function () {
-      if (this.status === 200) { // the result is OK
-        var response = JSON.parse(xhr.response);
-        console.log('onload response', response);
-        HandlerResponse(response);
-      }
-    };
-
-    // send the request
-    xhr.send();
+    //0eGsygTp906u18L0Oimnem
 
     var boton = document.querySelector(".btn-play");
     var audio = document.getElementById("audio");
     var bar = document.querySelector(".seekbar progress");
-    var chivato = 0;
+    var formulario = document.querySelector("form");
+    var playing = false;
+    var song = false;
+    bar.value = 0;
 
-    var HandlerResponse = function(response){
-        var titulo = document.querySelector(".title");
-        var responseTitulo = response.album.name;
-        var autor = document.querySelector(".author");
-        var responseAutor = response.artists[0].name;
-        var img = document.querySelector(".cover").querySelector("img");
-        img.src = response.album.images[0].url;
-        titulo.textContent=responseTitulo;
-        autor.textContent=responseAutor;
+    var infoTrack = function(response){
+        document.querySelector(".title").textContent = response.album.name;
+        document.querySelector(".author").textContent = response.artists[0].name;
+        document.querySelector(".cover").querySelector("img").src = response.album.images[1].url;
         audio.src = response.preview_url;
-        bar.value = 0;
+        boton.classList.remove('disabled');
+        song = true;
     };
 
-    boton.addEventListener(
-    'click', function () {
-        if (chivato==0) {
+    boton.addEventListener('click', function () {
+      if (song){
+        if (!playing) {
             audio.play();
             boton.classList.add('playing');
-            chivato = 1 ;
+            playing = true ;
         }
         else {
             audio.pause();
             boton.classList.remove('playing');
-            chivato = 0;
+            playing = false;
         }
+      }
     });
 
     audio.addEventListener('timeupdate', function() {
       bar.max = audio.duration;
       bar.value = audio.currentTime;
+      if (audio.currentTime == audio.duration){
+        boton.classList.remove('playing');
+        playing = false;
+        bar.value = 0;
+      }
     });
+
+    formulario.addEventListener('submit', function(evt) {
+      evt.preventDefault();
+      var track = formulario[0].value.split(':')[2];
+      console.log(track);
+      findMetaData(track);
+    });
+
+    var findMetaData = function(track){
+      var xhr = new XMLHttpRequest();
+      var baseURL = "https://api.spotify.com/v1/tracks/";
+      xhr.open('GET', baseURL + track);
+
+      xhr.setRequestHeader('Accept', 'application/json');
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.response);
+          infoTrack(response);
+      };
+    };
+
+    xhr.send();
+  };
 
 })(window);
 
