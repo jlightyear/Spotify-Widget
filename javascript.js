@@ -1,15 +1,36 @@
 (function (global) {
   'use strict';
 
-    //0eGsygTp906u18L0Oimnem
-
     var boton = document.querySelector(".btn-play");
     var audio = document.getElementById("audio");
     var bar = document.querySelector(".seekbar progress");
     var formulario = document.querySelector("form");
     var playing = false;
     var song = false;
-    bar.value = 0;
+
+    var setTrack = function(track) {
+      //Default track
+      if (track == "") {
+        track = "0eGsygTp906u18L0Oimnem";
+      }
+
+      var xhr = new XMLHttpRequest();
+      var baseURL = "https://api.spotify.com/v1/tracks/";
+      xhr.open('GET', baseURL + track);
+
+      xhr.setRequestHeader('Accept', 'application/json');
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.response);
+          infoTrack(response);
+        };
+      };
+
+      xhr.send();
+    };
+
+    setTrack("");
 
     var infoTrack = function(response){
         document.querySelector(".title").textContent = response.album.name;
@@ -18,6 +39,7 @@
         audio.src = response.preview_url;
         boton.classList.remove('disabled');
         song = true;
+        bar.value = 0;
     };
 
     boton.addEventListener('click', function () {
@@ -49,25 +71,8 @@
       evt.preventDefault();
       var track = formulario[0].value.split(':')[2];
       console.log(track);
-      findMetaData(track);
+      setTrack(track);
     });
-
-    var findMetaData = function(track){
-      var xhr = new XMLHttpRequest();
-      var baseURL = "https://api.spotify.com/v1/tracks/";
-      xhr.open('GET', baseURL + track);
-
-      xhr.setRequestHeader('Accept', 'application/json');
-
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          var response = JSON.parse(xhr.response);
-          infoTrack(response);
-      };
-    };
-
-    xhr.send();
-  };
 
 })(window);
 
