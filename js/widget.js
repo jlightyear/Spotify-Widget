@@ -81,7 +81,7 @@
       if(playing) {
         audio.currentTime = (evt.layerX*audio.duration)/200;
         bar.value = audio.currentTime;
-        console.log(document.querySelector(".seekbar progress").style.width);
+        //console.log(document.querySelector(".seekbar progress").style.width);
       }
     });
 
