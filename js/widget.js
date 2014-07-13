@@ -23,7 +23,7 @@
       xhr.onload = function() {
         if (xhr.status === 200) {
           var response = JSON.parse(xhr.response);
-          infoTrack(response);
+          setInfoTrack(response);
         };
       };
 
@@ -32,7 +32,7 @@
 
     setTrack("");
 
-    var infoTrack = function(response){
+    var setInfoTrack = function(response){
         document.querySelector(".title").textContent = response.album.name;
         document.querySelector(".author").textContent = response.artists[0].name;
         document.querySelector(".cover").querySelector("img").src = response.album.images[1].url;
@@ -71,7 +71,18 @@
       evt.preventDefault();
       var track = formulario[0].value.split(':')[2];
       console.log(track);
+      boton.classList.remove('playing');
+      playing = false;
       setTrack(track);
+    });
+
+    //We can interact with the progress bar
+    bar.addEventListener('click', function(evt) {
+      if(playing) {
+        audio.currentTime = (evt.layerX*audio.duration)/200;
+        bar.value = audio.currentTime;
+        console.log(document.querySelector(".seekbar progress").style.width);
+      }
     });
 
 })(window);
