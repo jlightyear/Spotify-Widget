@@ -79,7 +79,7 @@
     //We can interact with the progress bar
     bar.addEventListener('click', function(evt) {
       if(playing) {
-        audio.currentTime = (evt.layerX*audio.duration)/200;
+        audio.currentTime = (evt.layerX*audio.duration)/evt.target.clientwidth;
         bar.value = audio.currentTime;
         //console.log(document.querySelector(".seekbar progress").style.width);
       }
