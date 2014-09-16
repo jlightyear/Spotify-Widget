@@ -8,29 +8,31 @@
     var playing = false;
     var song = false;
 
-    var setTrack = function(track) {
-      //Default track
-      if (track == "") {
-        track = "0eGsygTp906u18L0Oimnem";
+    var setTrack = function(queryURL, list) {
+      /*
+      Default queryURL
+      if (queryURL == "") {
+        queryURL = "0eGsygTp906u18L0Oimnem";
       }
+      */
 
       var xhr = new XMLHttpRequest();
-      var baseURL = "https://api.spotify.com/v1/tracks/";
-      xhr.open('GET', baseURL + track);
-
+      //var baseURL = "https://api.spotify.com/v1/tracks/";
+      xhr.open('GET', queryURL);
       xhr.setRequestHeader('Accept', 'application/json');
 
       xhr.onload = function() {
         if (xhr.status === 200) {
           var response = JSON.parse(xhr.response);
-          setInfoTrack(response);
+          if (list === 0) setInfoTrack(response);
+          else if (response.tracks.items.length > 0) displayResults(response);
         };
       };
 
       xhr.send();
     };
 
-    setTrack("");
+    //setTrack("");
 
     var setInfoTrack = function(response){
         document.querySelector(".title").textContent = response.album.name;
@@ -40,6 +42,44 @@
         boton.classList.remove('disabled');
         song = true;
         bar.value = 0;
+    };
+
+
+    var displayResults = function(response){
+      var elem = document.getElementsByTagName('table')[0];
+      if (elem){
+        elem.parentNode.removeChild(elem);
+      }
+      var table = document.createElement('table');
+      var row;
+      var cell1;
+      var cell2;
+      var cell3;
+      var img;
+      var link;
+
+      for (var i = 0; i < response.tracks.items.length; i++) {
+        row = table.insertRow(i);
+        cell1 = row.insertCell(0);
+        cell2 = row.insertCell(1);
+        cell3 = row.insertCell(2);
+        link = document.createElement('a');
+        link.href = response.tracks.items[i].href;
+        link.className = "hidden";
+        img = document.createElement('img');
+        img.src = response.tracks.items[i].album.images[2].url; //urlIMG
+        cell1.appendChild(img);
+        cell1.appendChild(link);
+        cell2.innerHTML = response.tracks.items[i].name;
+        cell3.innerHTML = response.tracks.items[i].artists[0].name;  //ALL THE ARTISTS!
+        };
+
+      document.getElementsByClassName('table')[0].appendChild(table);
+      document.getElementsByClassName('table')[0].className = "table";
+      document.getElementsByTagName('tbody')[0].addEventListener('click', function(){
+      var url = event.target.parentNode.firstChild.lastChild.href;
+      setTrack(url,0);
+      });
     };
 
     boton.addEventListener('click', function () {
@@ -67,26 +107,26 @@
       }
     });
 
-    formulario.addEventListener('submit', function(evt) {
-      evt.preventDefault();
-      var track = formulario[0].value.split(':')[2];
-      console.log(track);
-      boton.classList.remove('playing');
-      playing = false;
-      setTrack(track);
-    });
-
     //We can interact with the progress bar
     bar.addEventListener('click', function(evt) {
       if(playing) {
         audio.currentTime = (evt.layerX*audio.duration)/evt.target.clientWidth;
-        //audio.currentTime = (evt.layerX*audio.duration)/200;
         bar.value = audio.currentTime;
       }
     });
 
-})(window);
+    formulario.addEventListener('submit', searchTracks);
 
-// fly me to the moon
-// encodeURIComponent(parametroDeBusqueda)
-// https://api.spotify.com/v1/search?q={{ PARAMETRO DE BUSQUEDA }}&type=track
+    function searchTracks(event){
+      event.preventDefault();
+      var name = formulario[0].value;
+      if (!name){
+        formulario[0].value = "Insert something in here!!";
+        return;
+      }
+      var q = name.replace(" ", "%20");
+      q = "https://api.spotify.com/v1/search?q=" + q + "&type=track&limit=10";
+      setTrack(q,1);
+      };
+
+})(window);
