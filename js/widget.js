@@ -45,6 +45,7 @@
     };
 
 
+    /*
     var displayResults = function(response){
       var elem = document.getElementsByTagName('table')[0];
       if (elem){
@@ -80,6 +81,43 @@
       var url = event.target.parentNode.firstChild.lastChild.href;
       setTrack(url,0);
       });
+    };
+    */
+
+    var displayResults = function(response){
+      var elem = document.getElementById("results");;
+      /*
+      if (elem){
+        elem.removeChild(elem);
+      }*/
+      var li;
+      var span;
+      var img;
+      var link;
+
+      for (var i = 0; i < response.tracks.items.length; i++) {
+        li = document.createElement('li');
+        link = document.createElement('a');
+        link.href = response.tracks.items[i].href;
+        link.className = "hidden";
+        li.appendChild(link);
+        span = document.createElement('span');
+        span.className = "artist";
+        span.innerHTML = response.tracks.items[i].artists[0].name;
+        link.appendChild(span);
+        span = document.createElement('span');
+        span.className = "song";
+        span.innerHTML = response.tracks.items[i].name;
+        link.appendChild(span);
+        //img = document.createElement('img');
+        //img.src = response.tracks.items[i].album.images[2].url; //urlIMG
+        elem.appendChild(li);
+      };
+      /*document.getElementsByTagName('li')[0].addEventListener('click', function(){
+      var url = event.target.parentNode.firstChild.lastChild.href;
+      setTrack(url,0);
+      });
+      */
     };
 
     boton.addEventListener('click', function () {
