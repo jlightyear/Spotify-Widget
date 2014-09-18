@@ -9,13 +9,6 @@
     var song = false;
 
     var setTrack = function(queryURL, list) {
-      /*
-      Default queryURL
-      if (queryURL == "") {
-        queryURL = "0eGsygTp906u18L0Oimnem";
-      }
-      */
-
       var xhr = new XMLHttpRequest();
       //var baseURL = "https://api.spotify.com/v1/tracks/";
       xhr.open('GET', queryURL);
@@ -32,64 +25,23 @@
       xhr.send();
     };
 
-    //setTrack("");
-
     var setInfoTrack = function(response){
         document.querySelector(".title").textContent = response.album.name;
         document.querySelector(".author").textContent = response.artists[0].name;
         document.querySelector(".cover").querySelector("img").src = response.album.images[1].url;
         audio.src = response.preview_url;
         boton.classList.remove('disabled');
+        boton.classList.remove('playing');
+        playing = false;
         song = true;
         bar.value = 0;
     };
 
-
-    /*
     var displayResults = function(response){
-      var elem = document.getElementsByTagName('table')[0];
-      if (elem){
-        elem.parentNode.removeChild(elem);
+      var list = document.getElementById("results");;
+      while (list.firstChild) {
+        list.removeChild(list.firstChild);
       }
-      var table = document.createElement('table');
-      var row;
-      var cell1;
-      var cell2;
-      var cell3;
-      var img;
-      var link;
-
-      for (var i = 0; i < response.tracks.items.length; i++) {
-        row = table.insertRow(i);
-        cell1 = row.insertCell(0);
-        cell2 = row.insertCell(1);
-        cell3 = row.insertCell(2);
-        link = document.createElement('a');
-        link.href = response.tracks.items[i].href;
-        link.className = "hidden";
-        img = document.createElement('img');
-        img.src = response.tracks.items[i].album.images[2].url; //urlIMG
-        cell1.appendChild(img);
-        cell1.appendChild(link);
-        cell2.innerHTML = response.tracks.items[i].name;
-        cell3.innerHTML = response.tracks.items[i].artists[0].name;  //ALL THE ARTISTS!
-        };
-
-      document.getElementsByClassName('table')[0].appendChild(table);
-      document.getElementsByClassName('table')[0].className = "table";
-      document.getElementsByTagName('tbody')[0].addEventListener('click', function(){
-      var url = event.target.parentNode.firstChild.lastChild.href;
-      setTrack(url,0);
-      });
-    };
-    */
-
-    var displayResults = function(response){
-      var elem = document.getElementById("results");;
-      /*
-      if (elem){
-        elem.removeChild(elem);
-      }*/
       var li;
       var span;
       var img;
@@ -104,20 +56,24 @@
         span = document.createElement('span');
         span.className = "artist";
         span.innerHTML = response.tracks.items[i].artists[0].name;
-        link.appendChild(span);
+        li.appendChild(span);
         span = document.createElement('span');
         span.className = "song";
         span.innerHTML = response.tracks.items[i].name;
-        link.appendChild(span);
-        //img = document.createElement('img');
-        //img.src = response.tracks.items[i].album.images[2].url; //urlIMG
-        elem.appendChild(li);
+        li.appendChild(span);
+        /*
+        img = document.createElement('img');
+        img.src = response.tracks.items[i].album.images[2].url;
+        link.appendChild(img);
+        */
+        list.appendChild(li);
       };
-      /*document.getElementsByTagName('li')[0].addEventListener('click', function(){
-      var url = event.target.parentNode.firstChild.lastChild.href;
+      document.getElementsByTagName('ul')[0].addEventListener('click', function(){
+      event.preventDefault;
+      var url = event.target.parentNode.firstChild.href;
+      console.log(event.target.parentNode.firstChild);
       setTrack(url,0);
       });
-      */
     };
 
     boton.addEventListener('click', function () {

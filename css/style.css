@@ -169,6 +169,10 @@ progress::-moz-progress-bar {
   background-color: #45a800;
 }
 
+progress:hover{
+  cursor: pointer;
+}
+
 input {
   line-height: 1.7em;
   width: 280px;
@@ -200,18 +204,18 @@ button {
   background-color: #ccc;
 }
 
-#results li a {
+#results li {
   color: #3c3c3c;
-  text-decoration: none;
   display: block;
   padding: 15px 20px;
 }
 
-#results li a:hover {
+#results li:hover {
   background-color: #aaa;
+  color: #ffffff;
 }
 
-#results li a span {
+#results li span {
   width: 300px;
   margin: 0 auto;
   display: block;
@@ -219,7 +223,14 @@ button {
   font-size: 0.8rem;
 }
 
-#results li a .artist {
-  color: #3c3c3c;
+#results li span:hover {
+  cursor: pointer;
+}
+
+#results li .artist {
   font-size: 1rem;
+}
+
+.hidden{
+  display: none;
 }
